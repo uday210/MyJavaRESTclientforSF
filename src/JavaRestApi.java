@@ -67,11 +67,12 @@ private String createAccount(String inUrl,String accToken) throws Exception{
 			HttpClient httpclient = new HttpClient();
 			JSONObject account = new JSONObject();
 			String accountId="";
+			String contactId="";
 			try{
 				
-				account.put("Name", "udayREST1123");
+				account.put("Name", "REST Api Account");
 				account.put("Site", "www.alltricksworld.com");
-				account.put("AccountNumber", "inserted from rest");
+				account.put("AccountNumber", "9999");
 				account.put("test__c", "rest api is working");
 				
 				PostMethod post = new PostMethod(inUrl+"/services/data/v33.0/sobjects/Account/");
@@ -89,6 +90,48 @@ private String createAccount(String inUrl,String accToken) throws Exception{
 					 if(response.getBoolean("success")){
 						 accountId = response.getString("id");
 						 System.out.println("New Account record id :"+accountId+"\n \n");
+						 ///////////////////////////////////////////////////
+						 ////create a contact associated to this account////
+						 //////////////////////////////////////////////////
+						 JSONObject contact = new JSONObject();
+						 contact.put("LastName","Rest account contact");
+						 contact.put("AccountId",accountId);
+						 post = new PostMethod(inUrl+"/services/data/v33.0/sobjects/Contact/");
+						 post.setRequestHeader("Authorization","Bearer "+accToken);
+						 post.setRequestEntity(new StringRequestEntity(contact.toString(),"application/json",null));
+						 
+						 try{
+							 httpclient.executeMethod(post);
+							 JSONObject responseCon =  new JSONObject(new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
+							 contactId = responseCon.getString("id");
+							 System.out.println("Contact Create response :"+responseCon.toString(2));
+							 
+						 }catch(Exception e){
+							 e.printStackTrace();
+						 }
+						 
+						 //////////////////////////////////////
+						 //create a case for this account/////
+						 /////////////////////////////////////
+						 
+						 JSONObject case1 = new JSONObject();
+						 case1.put("Origin","Phone");
+						 case1.put("AccountId",accountId);
+						 case1.put("ContactId",contactId);
+						 case1.put("Description", "this case is raised from JAVA REST Client");
+						 post = new PostMethod(inUrl+"/services/data/v33.0/sobjects/case/");
+						 post.setRequestHeader("Authorization","Bearer "+accToken);
+						 post.setRequestEntity(new StringRequestEntity(case1.toString(),"application/json",null));
+						 
+						 try{
+							 httpclient.executeMethod(post);
+							 JSONObject responsecase =  new JSONObject(new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
+							 
+							 System.out.println("Case Create response :"+responsecase.toString(2));
+							 
+						 }catch(Exception e){
+							 e.printStackTrace();
+						 }
 						 
 					 }
 				 }catch(Exception e){
