@@ -13,13 +13,13 @@ import org.json.JSONTokener;
 
 public class JavaRestApi {
 	//The connection data
-	private static final String clientId ="3MVG9ZL0ppGP5UrCLf48IdcxEbea5RLFlwfDrHxyY27twbQpTkYD4g73kpSMmUjwC9.yibD3uy0JQMzzx9Lem";
-	private static final String clientSecret ="7543313988284786732";
+	private static final String clientId ="<clientid>";
+	private static final String clientSecret ="<clientsecret>";
 	private static final String redirecturi ="https://localhost:8443/RestTest/oauth/_callback";
 	private static String tokenUrl =null;
 	private static final String environment  ="https://login.salesforce.com";
-	private static final String username ="kiran210@gmail.com";
-	private static final String password ="Bussas210#neJgHCw4kpXwShsKiv8lMY1Hg";
+	private static final String username ="<username>";
+	private static final String password ="<password+token>"";
 	
 	private static String accessToken = null;
 	private static String instanceUrl=null;
